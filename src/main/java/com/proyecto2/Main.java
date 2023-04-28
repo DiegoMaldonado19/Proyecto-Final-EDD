@@ -3,7 +3,7 @@
  */
 
 package com.proyecto2;
-
+import com.proyecto2.view.*;
 /**
  *
  * @author ACER
@@ -11,6 +11,7 @@ package com.proyecto2;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        MainFrame mainFrame = new MainFrame();
+        mainFrame.setVisible(true);
     }
 }
