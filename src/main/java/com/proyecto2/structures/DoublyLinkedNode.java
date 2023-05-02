@@ -8,23 +8,23 @@ package com.proyecto2.structures;
  *
  * @author CARIadmin
  */
-public class DoublyLinkedNode {
+public class DoublyLinkedNode<T> {
 
-    private int data;
+    private T data;
     private DoublyLinkedNode prev;
     private DoublyLinkedNode next;
 
-    public DoublyLinkedNode(int data) {
+    public DoublyLinkedNode(T data) {
         this.data = data;
         this.prev = null;
         this.next = null;
     }
 
-    public int getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(int data) {
+    public void setData(T data) {
         this.data = data;
     }
 

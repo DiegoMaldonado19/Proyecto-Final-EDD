@@ -8,12 +8,12 @@ package com.proyecto2.structures;
  *
  * @author CARIadmin
  */
-public class DoublyLinkedList {
+public class DoublyLinkedList<T> {
 
     private DoublyLinkedNode head;
 
     // insert a newDoublyLinkedNode at the end of the list
-    public void insertEnd(int data) {
+    public void insert(T data) {
         DoublyLinkedNode new_DoublyLinkedNode = new DoublyLinkedNode(data);
 
         DoublyLinkedNode temp = head;
@@ -35,25 +35,29 @@ public class DoublyLinkedList {
         new_DoublyLinkedNode.setPrev(temp);
     }
 
-    // delete a DoublyLinkedNode from the doubly linked list
-    public void deleteDoublyLinkedNode(DoublyLinkedNode del_DoublyLinkedNode) {
+    public DoublyLinkedNode deleteNode(T data) {
+        DoublyLinkedNode node = this.head;
+        while (node != null) {
+            if (node.getData().equals(data)) {
+                if (head == null) {
+                    System.out.println("Lista vacia");
+                }
 
-        if (head == null || del_DoublyLinkedNode == null) {
-            System.out.println("Lista vacia");
+                if (head == node) {
+                    head = node.getNext();
+                }
+
+                if (node.getNext() != null) {
+                    node.getNext().setPrev(node.getPrev());
+                }
+
+                if (node.getPrev() != null) {
+                    node.getPrev().setNext(node.getNext());
+                }
+            }
+            node = node.getNext();
         }
-
-        if (head == del_DoublyLinkedNode) {
-            head = del_DoublyLinkedNode.getNext();
-        }
-
-        if (del_DoublyLinkedNode.getNext() != null) {
-            del_DoublyLinkedNode.getNext().setPrev(del_DoublyLinkedNode.getPrev());
-        }
-
-        if (del_DoublyLinkedNode.getPrev() != null) {
-            del_DoublyLinkedNode.getPrev().setNext(del_DoublyLinkedNode.getNext());
-        }
-
+        return null;
     }
 
     public void printlist() {
