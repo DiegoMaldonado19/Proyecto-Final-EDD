@@ -1,9 +1,11 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package com.proyecto2;
+
 import com.proyecto2.view.*;
+import com.proyecto2.structures.*;
+
 /**
  *
  * @author ACER
