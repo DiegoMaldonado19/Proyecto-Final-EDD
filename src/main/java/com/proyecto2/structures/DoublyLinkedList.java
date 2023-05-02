@@ -7,12 +7,12 @@ package com.proyecto2.structures;
 /**
  *
  * @author CARIadmin
+ * @param <T>
  */
 public class DoublyLinkedList<T> {
 
     private DoublyLinkedNode head;
 
-    // insert a newDoublyLinkedNode at the end of the list
     public void insert(T data) {
         DoublyLinkedNode new_DoublyLinkedNode = new DoublyLinkedNode(data);
 
