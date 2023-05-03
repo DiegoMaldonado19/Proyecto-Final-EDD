@@ -8,10 +8,12 @@ import com.proyecto2.view.MainFrame;
 import java.io.*;
 import javax.swing.*;
 import javax.xml.parsers.*;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -43,7 +45,7 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            NodeList nodeList = doc.getElementsByTagName("estructura");
+            NodeList nodeList = doc.getElementsByTagName("reporte");
 
             for (int i = 0; i < nodeList.getLength(); i++) {
 
@@ -67,12 +69,11 @@ public class XMLReader {
                             String fieldType = fieldElement.getTextContent();
 
                             text.append(fieldName + ": " + fieldType + "\n");
-
                         }
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
             JOptionPane.showMessageDialog(mainFrame, e.getMessage());
         }
     }
