@@ -7,12 +7,19 @@ package com.proyecto2.files;
 import com.proyecto2.view.MainFrame;
 import java.io.*;
 import javax.swing.*;
+import javax.xml.parsers.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
  * @author ACER
  */
 public class XMLReader {
+
+    /*
       public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
         FileReader fr = new FileReader(archive);
         BufferedReader br = new BufferedReader(fr);
@@ -26,5 +33,47 @@ public class XMLReader {
         JOptionPane.showMessageDialog(mainFrame, "Archivo cargado con exito");
         
         fr.close();
+    }
+     */
+    public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(archive);
+
+            doc.getDocumentElement().normalize();
+
+            NodeList nodeList = doc.getElementsByTagName("estructura");
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+
+                Node node = nodeList.item(i);
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element element = (Element) node;
+                    
+                    NodeList fields = element.getChildNodes();
+
+                    for (int j = 0; j < fields.getLength(); j++) {
+
+                        Node field = fields.item(j);
+
+                        if (field.getNodeType() == Node.ELEMENT_NODE) {
+
+                            Element fieldElement = (Element) field;
+
+                            String fieldName = fieldElement.getTagName();
+                            String fieldType = fieldElement.getTextContent();
+
+                            text.append(fieldName + ": " + fieldType + "\n");
+
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainFrame, e.getMessage());
+        }
     }
 }
