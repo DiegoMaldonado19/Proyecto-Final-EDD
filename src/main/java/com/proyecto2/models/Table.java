@@ -15,16 +15,14 @@ public class Table<T> {
     private DoublyLinkedList params;
     private T primaryKey;
     private String name;
-    private T keyAssoc;
     /*
     private BPlusTree tree;
     */
 
-    public Table(DoublyLinkedList params, T primaryKey, String name, T keyAssoc) {
+    public Table(DoublyLinkedList params, T primaryKey, String name) {
         this.params = params;
         this.primaryKey = primaryKey;
         this.name = name;
-        this.keyAssoc = keyAssoc;
     }
 
     public DoublyLinkedList getParams() {
@@ -49,13 +47,5 @@ public class Table<T> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public T getKeyAssoc() {
-        return keyAssoc;
-    }
-
-    public void setKeyAssoc(T keyAssoc) {
-        this.keyAssoc = keyAssoc;
     }
 }

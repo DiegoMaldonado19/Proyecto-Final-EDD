@@ -4,7 +4,9 @@
  */
 package com.proyecto2.files;
 
-import com.proyecto2.view.MainFrame;
+import com.proyecto2.controller.*;
+import com.proyecto2.models.*;
+import com.proyecto2.view.*;
 import java.io.*;
 import javax.swing.*;
 import javax.xml.parsers.*;
@@ -20,24 +22,11 @@ import org.xml.sax.SAXException;
  * @author ACER
  */
 public class XMLReader {
-
-    /*
-      public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
-        FileReader fr = new FileReader(archive);
-        BufferedReader br = new BufferedReader(fr);
-   
-        String linea;
     
-        while((linea = br.readLine()) != null){
-            text.append(linea+"\n");
-        }
-        
-        JOptionPane.showMessageDialog(mainFrame, "Archivo cargado con exito");
-        
-        fr.close();
-    }
-     */
+    private TableCreator tableCreator;
+
     public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+        tableCreator = new TableCreator();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -45,7 +34,7 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            NodeList nodeList = doc.getElementsByTagName("reporte");
+            NodeList nodeList = doc.getElementsByTagName("estructura");
 
             for (int i = 0; i < nodeList.getLength(); i++) {
 
@@ -67,8 +56,12 @@ public class XMLReader {
 
                             String fieldName = fieldElement.getTagName();
                             String fieldType = fieldElement.getTextContent();
+                            
+                            Param parameter = new Param(fieldName, fieldType);
+                            
+                            tableCreator.create(parameter);
 
-                            text.append(fieldName + ": " + fieldType + "\n");
+                            text.append(parameter.toString()+"\n");
                         }
                     }
                 }
