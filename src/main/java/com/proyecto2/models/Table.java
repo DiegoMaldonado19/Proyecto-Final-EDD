@@ -4,7 +4,7 @@
  */
 package com.proyecto2.models;
 
-import com.proyecto2.structures.DoublyLinkedList;
+import com.proyecto2.structures.*;
 
 /**
  *
@@ -12,17 +12,17 @@ import com.proyecto2.structures.DoublyLinkedList;
  * @param <T>
  */
 public class Table<T> {
+
     private DoublyLinkedList params;
     private T primaryKey;
     private String name;
-    /*
     private BPlusTree tree;
-    */
 
-    public Table(DoublyLinkedList params, T primaryKey, String name) {
+    public Table(DoublyLinkedList params, T primaryKey, String name, int order) {
         this.params = params;
         this.primaryKey = primaryKey;
         this.name = name;
+        this.tree = new BPlusTree(order);
     }
 
     public DoublyLinkedList getParams() {
@@ -47,5 +47,13 @@ public class Table<T> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BPlusTree getTree() {
+        return tree;
+    }
+
+    public void setTree(BPlusTree tree) {
+        this.tree = tree;
     }
 }

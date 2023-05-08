@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
  * @author ACER
  */
 public class XMLReader {
-    
+
     private TableCreator tableCreator;
 
     public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
@@ -34,16 +34,28 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            NodeList nodeList = doc.getElementsByTagName("estructura");
+            NodeList estructuras = doc.getElementsByTagName("estructura");
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
+            traverseNodeList(estructuras, text, mainFrame);
 
-                Node node = nodeList.item(i);
+        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
+            JOptionPane.showMessageDialog(mainFrame, e.getMessage());
+        }
+    }
+
+    private void traverseNodeList(NodeList list, JTextArea text, MainFrame mainFrame) {
+        for (int i = 0; i < list.getLength(); i++) {
+            Node genericNode = list.item(i);
+
+            if (genericNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element genericElement = (Element) genericNode;
+
+                Node node = list.item(i);
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element element = (Element) node;
-                    
+
                     NodeList fields = element.getChildNodes();
 
                     for (int j = 0; j < fields.getLength(); j++) {
@@ -56,18 +68,16 @@ public class XMLReader {
 
                             String fieldName = fieldElement.getTagName();
                             String fieldType = fieldElement.getTextContent();
-                            
+
                             Param parameter = new Param(fieldName, fieldType);
-                            
+
                             tableCreator.create(parameter);
 
-                            text.append(parameter.toString()+"\n");
+                            text.append(parameter.toString() + "\n");
                         }
                     }
                 }
             }
-        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
-            JOptionPane.showMessageDialog(mainFrame, e.getMessage());
         }
     }
 }

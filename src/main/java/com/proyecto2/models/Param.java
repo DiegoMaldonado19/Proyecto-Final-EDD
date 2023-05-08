@@ -9,20 +9,20 @@ package com.proyecto2.models;
  * @author CARIadmin
  */
 public class Param {
-    private String name;
+    private String tag;
     private String type;
 
-    public Param(String name, String type) {
-        this.name = name;
+    public Param(String tag, String type) {
+        this.tag = tag;
         this.type = type;
     }
 
-    public String getName() {
-        return name;
+    public String getTag() {
+        return tag;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getType() {
@@ -35,6 +35,6 @@ public class Param {
 
     @Override
     public String toString() {
-        return "Parametro: " + "nombre= " + name + ", tipo de dato= " + type;
+        return "Parametro: " + " Tag= " + tag + ", tipo de dato= " + type;
     }
 }
