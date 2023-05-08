@@ -9,15 +9,17 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import com.proyecto2.files.*;
+import com.proyecto2.structures.*;
+
 /**
  *
  * @author ACER
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     private XMLReader xmlReader;
     private DataFrame dataFrame;
-    
+
     /**
      * Creates new form MainFrame
      */
@@ -37,14 +39,26 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree2 = new javax.swing.JTree();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         archiveChargeButton = new javax.swing.JMenu();
         editingTablesButton = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+
+        jMenu1.setText("File");
+        jMenuBar2.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar2.add(jMenu2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,6 +67,10 @@ public class MainFrame extends javax.swing.JFrame {
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane4.setViewportView(jTextArea1);
+
+        jButton1.setText("jButton1");
+
+        jLabel1.setText("jLabel1");
 
         archiveChargeButton.setText("Cargar Archivo");
         archiveChargeButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -69,6 +87,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         jMenuBar1.add(editingTablesButton);
+
+        jMenu3.setText("jMenu3");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -108,7 +134,7 @@ public class MainFrame extends javax.swing.JFrame {
         JFileChooser fileChosser = new JFileChooser();
         int seleccion = fileChosser.showOpenDialog(this);
         this.jTextArea1.setText(" ");
-        if(seleccion == JFileChooser.APPROVE_OPTION){
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChosser.getSelectedFile();
             try {
                 this.xmlReader.readXMLFile(selectedFile, this.jTextArea1, this);
@@ -121,17 +147,38 @@ public class MainFrame extends javax.swing.JFrame {
     private void editingTablesButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editingTablesButtonMouseClicked
         JOptionPane.showMessageDialog(this, "Evento para enviar a Frame de edicion de tablas");
         this.dataFrame = new DataFrame();
-        
+
         this.dataFrame.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_editingTablesButtonMouseClicked
 
-  
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        BPlusTree bpt = null;
+        bpt = new BPlusTree(3);
+        bpt.insert(5, 33);
+        bpt.insert(15, "veintiuno");
+        bpt.insert(25, 31);
+        bpt.insert(35, "hola mundo");
+        bpt.insert(45, 10);
+
+        if (bpt.search(15) != null) {
+            JOptionPane.showMessageDialog(this, bpt.search(15).toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Valor no encontrado");
+        }
+    }//GEN-LAST:event_jMenu3MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu archiveChargeButton;
     private javax.swing.JMenu editingTablesButton;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
