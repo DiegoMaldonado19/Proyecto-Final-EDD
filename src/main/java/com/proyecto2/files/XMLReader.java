@@ -34,7 +34,8 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            NodeList estructuras = doc.getElementsByTagName("estructura");
+            Node firstElement = doc.getFirstChild();
+            NodeList estructuras = firstElement.getChildNodes();
 
             traverseNodeList(estructuras, text, mainFrame);
 
