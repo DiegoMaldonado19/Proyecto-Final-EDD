@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author CARIadmin
  */
-public class BPlusTree<T>{
+public class BPlusTree<T> {
 
     int m;
     InternalNode root;
@@ -569,7 +569,7 @@ public class BPlusTree<T>{
      * dictionary pair accordingly into the B+ tree.
      *
      * @param key: an integer key to be used in the dictionary pair
-     * @param value: a floating point number to be used in the dictionary pair
+     * @param value: a value to be used in the dictionary pair
      */
     public void insert(int key, T value) {
         if (isEmpty()) {
