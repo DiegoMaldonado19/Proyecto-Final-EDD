@@ -34,10 +34,9 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            Node firstElement = doc.getFirstChild();
-            NodeList estructuras = firstElement.getChildNodes();
+            NodeList xml = doc.getElementsByTagName("*");
 
-            traverseNodeList(estructuras, text, mainFrame);
+            traverseNodeList(xml, text, mainFrame);
 
         } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
             JOptionPane.showMessageDialog(mainFrame, e.getMessage());
