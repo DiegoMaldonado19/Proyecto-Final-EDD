@@ -34,50 +34,95 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            NodeList xml = doc.getElementsByTagName("*");
-
-            traverseNodeList(xml, text, mainFrame);
+            traverseNodeList(doc, text, mainFrame);
 
         } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
             JOptionPane.showMessageDialog(mainFrame, e.getMessage());
         }
     }
 
-    private void traverseNodeList(NodeList list, JTextArea text, MainFrame mainFrame) {
-        for (int i = 0; i < list.getLength(); i++) {
-            Node genericNode = list.item(i);
+    private void traverseNodeList(Document doc, JTextArea text, MainFrame mainFrame) {
 
-            if (genericNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element genericElement = (Element) genericNode;
+        NodeList structures = doc.getElementsByTagName("estructura");
 
-                Node node = list.item(i);
+        for (int i = 0; i < structures.getLength(); i++) {
+            Node structureNode = structures.item(i);
+            if (structureNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element structureElement = (Element) structureNode;
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                String table = getTextValue(structureElement, "tabla");
+                System.out.println("Tabla: " + table);
 
-                    Element element = (Element) node;
+                NodeList fields = structureElement.getChildNodes();
+                for (int j = 0; j < fields.getLength(); j++) {
+                    Node fieldNode = fields.item(j);
+                    if (fieldNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element fieldElement = (Element) fieldNode;
+                        String structureTag = fieldElement.getNodeName();
+                        String structureTagContent = fieldElement.getTextContent().trim();
+                        if (!structureTag.equals("relacion")) {
+                            System.out.println("Campo: " + structureTag + ", Tipo: " + structureTagContent);
+                        }
+                    }
+                }
 
-                    NodeList fields = element.getChildNodes();
+                NodeList relations = structureElement.getElementsByTagName("relacion");
+                for (int k = 0; k < relations.getLength(); k++) {
+                    Node relationNode = relations.item(k);
+                    if (relationNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element relationElement = (Element) relationNode;
 
-                    for (int j = 0; j < fields.getLength(); j++) {
-
-                        Node field = fields.item(j);
-
-                        if (field.getNodeType() == Node.ELEMENT_NODE) {
-
-                            Element fieldElement = (Element) field;
-
-                            String fieldName = fieldElement.getTagName();
-                            String fieldType = fieldElement.getTextContent();
-
-                            Param parameter = new Param(fieldName, fieldType);
-
-                            tableCreator.create(parameter);
-
-                            text.append(parameter.toString() + "\n");
+                        NodeList relationFields = relationElement.getElementsByTagName("*");
+                        for (int l = 0; l < relationFields.getLength(); l++) {
+                            Node relationFieldNode = relationFields.item(l);
+                            if (relationFieldNode.getNodeType() == Node.ELEMENT_NODE) {
+                                Element relationFieldElement = (Element) relationFieldNode;
+                                String relationTag = relationFieldElement.getTagName();
+                                String relationTagContent = relationFieldElement.getTextContent().trim();
+                                System.out.println("Campo de Relación: " + relationTag + ", Tipo: " + relationTagContent);
+                            }
                         }
                     }
                 }
             }
         }
+        
+        NodeList tags = doc.getElementsByTagName("*");
+
+        for (int i = 0; i < tags.getLength(); i++) {
+            Node tagNode = tags.item(i);
+            if (tagNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element tagElement = (Element) tagNode;
+                /*
+                String mainTagName = getTextValue(tagElement, "*");
+                System.out.println("Tabla: " + mainTagName);
+                */
+
+                NodeList fields = tagElement.getChildNodes();
+                for (int j = 0; j < fields.getLength(); j++) {
+                    Node fieldNode = fields.item(j);
+                    if (fieldNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element fieldElement = (Element) fieldNode;
+                        String structureTag = fieldElement.getNodeName();
+                        String structureTagContent = fieldElement.getTextContent().trim();
+                        System.out.println("Campo: " + structureTag + ", Tipo: " + structureTagContent);
+                    }
+                }
+            }
+        }
+    }
+
+    private static String getTextValue(Element element, String tagName) {
+        NodeList nodeList = element.getElementsByTagName(tagName);
+        if (nodeList != null && nodeList.getLength() > 0) {
+            Element tagElement = (Element) nodeList.item(0);
+            if (tagElement != null) {
+                Node textNode = tagElement.getFirstChild();
+                if (textNode != null) {
+                    return textNode.getNodeValue();
+                }
+            }
+        }
+        return "";
     }
 }
