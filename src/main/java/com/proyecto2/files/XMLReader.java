@@ -86,18 +86,13 @@ public class XMLReader {
                 }
             }
         }
-        
-        NodeList tags = doc.getElementsByTagName("*");
 
+        NodeList tags = doc.getElementsByTagName("*");
+        String tableName = tags.item(0).getNodeName();
         for (int i = 0; i < tags.getLength(); i++) {
             Node tagNode = tags.item(i);
             if (tagNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element tagElement = (Element) tagNode;
-                /*
-                String mainTagName = getTextValue(tagElement, "*");
-                System.out.println("Tabla: " + mainTagName);
-                */
-
                 NodeList fields = tagElement.getChildNodes();
                 for (int j = 0; j < fields.getLength(); j++) {
                     Node fieldNode = fields.item(j);
