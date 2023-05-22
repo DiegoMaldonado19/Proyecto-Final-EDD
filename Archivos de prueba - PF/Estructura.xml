@@ -1,0 +1,22 @@
+<estructuras>
+    <estructura>
+        <tabla>cliente</tabla>
+        <Nit>int</Nit>
+        <Nombre>char</Nombre>
+        <Apellido>char</Apellido>
+        <clave>Nit</clave>
+    </estructura>
+    <estructura>
+        <tabla> factura </tabla>
+        <NoFactura> int </NoFactura>
+        <NitF> int </NitF>
+        <Fecha> char </Fecha>
+        <Lugar> char </Lugar>
+        <Valor> int </Valor>
+        <clave> Nofactura </clave>
+        <relacion>
+            <NitF> int </NitF>
+            <cliente> Nit </cliente>
+        </relacion>
+    </estructura>
+</estructuras>
