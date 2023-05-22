@@ -35,6 +35,6 @@ public class Param {
 
     @Override
     public String toString() {
-        return "Parametro: " + " Tag= " + tag + ", tipo de dato= " + type;
+        return "Parametro: " + " Tag = " + tag + ", tipo de dato = " + type;
     }
 }

@@ -20,6 +20,11 @@ public class DoublyLinkedNode<T> {
         this.next = null;
     }
 
+    public DoublyLinkedNode() {
+        this.prev = null;
+        this.next = null;
+    }
+
     public T getData() {
         return data;
     }

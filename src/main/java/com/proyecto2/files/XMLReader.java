@@ -6,6 +6,7 @@ package com.proyecto2.files;
 
 import com.proyecto2.controller.*;
 import com.proyecto2.models.*;
+import com.proyecto2.structures.*;
 import com.proyecto2.view.*;
 import java.io.*;
 import javax.swing.*;
@@ -26,6 +27,7 @@ public class XMLReader {
     private TableCreator tableCreator;
 
     public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+        int amountOfElements = 0;
         tableCreator = new TableCreator();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -35,11 +37,11 @@ public class XMLReader {
             doc.getDocumentElement().normalize();
 
             if (archive.getName().equals("Estructura.xml")) {
-                traverseStructureList(doc, text, mainFrame);
+                traverseStructureList(doc, text, amountOfElements, tableCreator);
             } else if (archive.getName().equals("reportes.rpt")) {
-                traverseReportList(doc, text, mainFrame);
+                traverseReportList(doc, text);
             } else {
-                traverseAnyList(doc, text, mainFrame);
+                traverseAnyList(doc, text);
             }
 
         } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
@@ -47,7 +49,8 @@ public class XMLReader {
         }
     }
 
-    private void traverseStructureList(Document doc, JTextArea text, MainFrame mainFrame) {
+    private void traverseStructureList(Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator) {
+        DoublyLinkedList paramList = new DoublyLinkedList();
         NodeList structures = doc.getElementsByTagName("estructura");
 
         for (int i = 0; i < structures.getLength(); i++) {
@@ -66,11 +69,23 @@ public class XMLReader {
                         String structureTag = fieldElement.getNodeName();
                         String structureTagContent = fieldElement.getTextContent().trim();
                         if (!structureTag.equals("relacion")) {
-                            text.append("Nombre Campo: " + structureTag + ", Tipo: " + structureTagContent + "\n");
+                            if (structureTag.equals("tabla")) {
+                                amountOfElements = 0;
+                                paramList.deleteAllNodes();
+                            } else {
+                                amountOfElements++;
+                                Param parameterPair = new Param(structureTag, structureTagContent);
+                                paramList.insert(parameterPair);
+                            }
                         }
                     }
                 }
 
+                paramList.printlistInTextArea(text);
+                
+                tableCreator.create(paramList, amountOfElements);
+                
+                
                 NodeList relations = structureElement.getElementsByTagName("relacion");
                 for (int k = 0; k < relations.getLength(); k++) {
                     Node relationNode = relations.item(k);
@@ -94,7 +109,7 @@ public class XMLReader {
         }
     }
 
-    private void traverseAnyList(Document doc, JTextArea text, MainFrame mainFrame) {
+    private void traverseAnyList(Document doc, JTextArea text) {
         NodeList tags = doc.getElementsByTagName("*");
         text.append("Tabla: " + tags.item(0).getNodeName() + "\n");
         for (int i = 0; i < tags.getLength(); i++) {
@@ -115,7 +130,7 @@ public class XMLReader {
         }
     }
 
-    private void traverseReportList(Document doc, JTextArea text, MainFrame mainFrame) {
+    private void traverseReportList(Document doc, JTextArea text) {
         NodeList tags = doc.getElementsByTagName("reporte");
         for (int i = 0; i < tags.getLength(); i++) {
             Node tagNode = tags.item(i);

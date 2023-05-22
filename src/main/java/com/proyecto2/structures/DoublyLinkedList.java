@@ -4,6 +4,8 @@
  */
 package com.proyecto2.structures;
 
+import javax.swing.JTextArea;
+
 /**
  *
  * @author CARIadmin
@@ -71,5 +73,28 @@ public class DoublyLinkedList<T> {
             System.out.println("Lista vacia");
         }
         System.out.println();
+    }
+    
+     public void printlistInTextArea(JTextArea text) {
+        DoublyLinkedNode node = this.head;
+        if (node != null) {
+            while (node != null) {
+                text.append(node.getData()+"\n");
+                node = node.getNext();
+            }
+        } else {
+            System.out.println("Lista vacia");
+        }
+        System.out.println();
+    }
+
+    public void deleteAllNodes() {
+        DoublyLinkedNode temp = new DoublyLinkedNode();
+
+        while (this.head != null) {
+            temp = this.head;
+            this.head = this.head.getNext();
+            temp = null;
+        }
     }
 }

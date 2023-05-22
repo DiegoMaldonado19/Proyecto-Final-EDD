@@ -9,11 +9,20 @@ import com.proyecto2.structures.*;
  *
  * @author CARIadmin
  */
-public class TableCreator {
+public class TableCreator <T> {
     private DoublyLinkedList tableList;
     
-    public void create(Param parameter){
+    public void create(DoublyLinkedList paramList, int amountOfElements){
         tableList = new DoublyLinkedList();
-        this.tableList.insert(parameter);
+        
+        for(int i=0; i<amountOfElements; i++){
+            tableList.insert(createTable(paramList, primaryKey, name, amountOfElements));
+        }
+        
+    }
+    
+    private Table createTable(DoublyLinkedList params, T primaryKey, String name, int amountOfElements){
+        Table table = new Table(params, primaryKey, name, amountOfElements);
+        return table;
     }
 }
