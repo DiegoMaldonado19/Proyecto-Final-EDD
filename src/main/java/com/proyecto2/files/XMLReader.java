@@ -34,15 +34,20 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            traverseNodeList(doc, text, mainFrame);
+            if (archive.getName().equals("Estructura.xml")) {
+                traverseStructureList(doc, text, mainFrame);
+            } else if (archive.getName().equals("reportes.rpt")) {
+                traverseReportList(doc, text, mainFrame);
+            } else {
+                traverseAnyList(doc, text, mainFrame);
+            }
 
         } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
             JOptionPane.showMessageDialog(mainFrame, e.getMessage());
         }
     }
 
-    private void traverseNodeList(Document doc, JTextArea text, MainFrame mainFrame) {
-
+    private void traverseStructureList(Document doc, JTextArea text, MainFrame mainFrame) {
         NodeList structures = doc.getElementsByTagName("estructura");
 
         for (int i = 0; i < structures.getLength(); i++) {
@@ -51,7 +56,7 @@ public class XMLReader {
                 Element structureElement = (Element) structureNode;
 
                 String table = getTextValue(structureElement, "tabla");
-                System.out.println("Tabla: " + table);
+                text.append("Tabla: " + table + "\n");
 
                 NodeList fields = structureElement.getChildNodes();
                 for (int j = 0; j < fields.getLength(); j++) {
@@ -61,7 +66,7 @@ public class XMLReader {
                         String structureTag = fieldElement.getNodeName();
                         String structureTagContent = fieldElement.getTextContent().trim();
                         if (!structureTag.equals("relacion")) {
-                            System.out.println("Campo: " + structureTag + ", Tipo: " + structureTagContent);
+                            text.append("Nombre Campo: " + structureTag + ", Tipo: " + structureTagContent + "\n");
                         }
                     }
                 }
@@ -73,22 +78,25 @@ public class XMLReader {
                         Element relationElement = (Element) relationNode;
 
                         NodeList relationFields = relationElement.getElementsByTagName("*");
+                        text.append("Relacion: \n");
                         for (int l = 0; l < relationFields.getLength(); l++) {
                             Node relationFieldNode = relationFields.item(l);
                             if (relationFieldNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element relationFieldElement = (Element) relationFieldNode;
                                 String relationTag = relationFieldElement.getTagName();
                                 String relationTagContent = relationFieldElement.getTextContent().trim();
-                                System.out.println("Campo de Relación: " + relationTag + ", Tipo: " + relationTagContent);
+                                text.append("Nombre Campo: " + relationTag + ", Tipo: " + relationTagContent + "\n");
                             }
                         }
                     }
                 }
             }
         }
+    }
 
+    private void traverseAnyList(Document doc, JTextArea text, MainFrame mainFrame) {
         NodeList tags = doc.getElementsByTagName("*");
-        String tableName = tags.item(0).getNodeName();
+        text.append("Tabla: " + tags.item(0).getNodeName() + "\n");
         for (int i = 0; i < tags.getLength(); i++) {
             Node tagNode = tags.item(i);
             if (tagNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -98,9 +106,29 @@ public class XMLReader {
                     Node fieldNode = fields.item(j);
                     if (fieldNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element fieldElement = (Element) fieldNode;
-                        String structureTag = fieldElement.getNodeName();
-                        String structureTagContent = fieldElement.getTextContent().trim();
-                        System.out.println("Campo: " + structureTag + ", Tipo: " + structureTagContent);
+                        String anyTag = fieldElement.getNodeName();
+                        String anyTagContent = fieldElement.getTextContent().trim();
+                        text.append("Nombre Campo: " + anyTag + " , Tipo: " + anyTagContent + "\n");
+                    }
+                }
+            }
+        }
+    }
+
+    private void traverseReportList(Document doc, JTextArea text, MainFrame mainFrame) {
+        NodeList tags = doc.getElementsByTagName("reporte");
+        for (int i = 0; i < tags.getLength(); i++) {
+            Node tagNode = tags.item(i);
+            if (tagNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element tagElement = (Element) tagNode;
+                NodeList fields = tagElement.getChildNodes();
+                for (int j = 0; j < fields.getLength(); j++) {
+                    Node fieldNode = fields.item(j);
+                    if (fieldNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element fieldElement = (Element) fieldNode;
+                        String anyTag = fieldElement.getNodeName();
+                        String anyTagContent = fieldElement.getTextContent().trim();
+                        text.append("Nombre Campo: " + anyTag + " , Tipo: " + anyTagContent + "\n");
                     }
                 }
             }
