@@ -8,19 +8,19 @@ package com.proyecto2.structures;
  *
  * @author CARIadmin
  */
-public class DoublyLinkedNode<T> {
+public class GenericDoublyLinkedNode<T> {
 
     private T data;
-    private DoublyLinkedNode prev;
-    private DoublyLinkedNode next;
+    private GenericDoublyLinkedNode prev;
+    private GenericDoublyLinkedNode next;
 
-    public DoublyLinkedNode(T data) {
+    public GenericDoublyLinkedNode(T data) {
         this.data = data;
         this.prev = null;
         this.next = null;
     }
 
-    public DoublyLinkedNode() {
+    public GenericDoublyLinkedNode() {
         this.prev = null;
         this.next = null;
     }
@@ -33,19 +33,19 @@ public class DoublyLinkedNode<T> {
         this.data = data;
     }
 
-    public DoublyLinkedNode getPrev() {
+    public GenericDoublyLinkedNode getPrev() {
         return prev;
     }
 
-    public void setPrev(DoublyLinkedNode prev) {
+    public void setPrev(GenericDoublyLinkedNode prev) {
         this.prev = prev;
     }
 
-    public DoublyLinkedNode getNext() {
+    public GenericDoublyLinkedNode getNext() {
         return next;
     }
 
-    public void setNext(DoublyLinkedNode next) {
+    public void setNext(GenericDoublyLinkedNode next) {
         this.next = next;
     }
 

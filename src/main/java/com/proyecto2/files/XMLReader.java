@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 public class XMLReader {
 
     private TableCreator tableCreator;
+    private TableLinkedList tableList;
 
     public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
         int amountOfElements = 0;
@@ -50,7 +51,7 @@ public class XMLReader {
     }
 
     private void traverseStructureList(Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator) {
-        DoublyLinkedList paramList = new DoublyLinkedList();
+        ParamLinkedList paramList = new ParamLinkedList();
         NodeList structures = doc.getElementsByTagName("estructura");
 
         for (int i = 0; i < structures.getLength(); i++) {
@@ -59,7 +60,6 @@ public class XMLReader {
                 Element structureElement = (Element) structureNode;
 
                 String table = getTextValue(structureElement, "tabla");
-                text.append("Tabla: " + table + "\n");
 
                 NodeList fields = structureElement.getChildNodes();
                 for (int j = 0; j < fields.getLength(); j++) {
@@ -80,11 +80,10 @@ public class XMLReader {
                         }
                     }
                 }
-
-                paramList.printlistInTextArea(text);
                 
-                tableCreator.create(paramList, amountOfElements);
+                tableList =  tableCreator.create(paramList, amountOfElements, table, structures.getLength());
                 
+                tableList.printlistInTextArea(text);
                 
                 NodeList relations = structureElement.getElementsByTagName("relacion");
                 for (int k = 0; k < relations.getLength(); k++) {

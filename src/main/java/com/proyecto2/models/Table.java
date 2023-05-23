@@ -13,23 +13,23 @@ import com.proyecto2.structures.*;
  */
 public class Table<T> {
 
-    private DoublyLinkedList params;
+    private ParamLinkedList params;
     private T primaryKey;
     private String name;
     private BPlusTree tree;
 
-    public Table(DoublyLinkedList params, T primaryKey, String name, int order) {
+    public Table(ParamLinkedList params, T primaryKey, String name, int order) {
         this.params = params;
         this.primaryKey = primaryKey;
         this.name = name;
         this.tree = new BPlusTree(order);
     }
 
-    public DoublyLinkedList getParams() {
-        return params;
+    public ParamLinkedList getParams() {
+        return this.params;
     }
 
-    public void setParams(DoublyLinkedList params) {
+    public void setParams(ParamLinkedList params) {
         this.params = params;
     }
 

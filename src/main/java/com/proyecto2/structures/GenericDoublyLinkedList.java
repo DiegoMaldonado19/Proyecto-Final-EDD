@@ -11,14 +11,14 @@ import javax.swing.JTextArea;
  * @author CARIadmin
  * @param <T>
  */
-public class DoublyLinkedList<T> {
+public class GenericDoublyLinkedList<T> {
 
-    private DoublyLinkedNode head;
+    private GenericDoublyLinkedNode head;
 
     public void insert(T data) {
-        DoublyLinkedNode new_DoublyLinkedNode = new DoublyLinkedNode(data);
+        GenericDoublyLinkedNode new_DoublyLinkedNode = new GenericDoublyLinkedNode(data);
 
-        DoublyLinkedNode temp = head;
+        GenericDoublyLinkedNode temp = head;
 
         new_DoublyLinkedNode.setNext(null);
 
@@ -37,8 +37,8 @@ public class DoublyLinkedList<T> {
         new_DoublyLinkedNode.setPrev(temp);
     }
 
-    public DoublyLinkedNode deleteNode(T data) {
-        DoublyLinkedNode node = this.head;
+    public GenericDoublyLinkedNode deleteNode(T data) {
+        GenericDoublyLinkedNode node = this.head;
         while (node != null) {
             if (node.getData().equals(data)) {
                 if (head == null) {
@@ -63,7 +63,7 @@ public class DoublyLinkedList<T> {
     }
 
     public void printlist() {
-        DoublyLinkedNode node = this.head;
+        GenericDoublyLinkedNode node = this.head;
         if (node != null) {
             while (node != null) {
                 System.out.print(node.getData() + "->");
@@ -76,7 +76,7 @@ public class DoublyLinkedList<T> {
     }
     
      public void printlistInTextArea(JTextArea text) {
-        DoublyLinkedNode node = this.head;
+        GenericDoublyLinkedNode node = this.head;
         if (node != null) {
             while (node != null) {
                 text.append(node.getData()+"\n");
@@ -89,7 +89,7 @@ public class DoublyLinkedList<T> {
     }
 
     public void deleteAllNodes() {
-        DoublyLinkedNode temp = new DoublyLinkedNode();
+        GenericDoublyLinkedNode temp = new GenericDoublyLinkedNode();
 
         while (this.head != null) {
             temp = this.head;
