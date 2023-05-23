@@ -19,6 +19,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private XMLReader xmlReader;
     private DataFrame dataFrame;
+    private TableLinkedList tableList;
 
     /**
      * Creates new form MainFrame
@@ -137,7 +138,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChosser.getSelectedFile();
             try {
-                this.xmlReader.readXMLFile(selectedFile, this.jTextArea1, this);
+                this.tableList = this.xmlReader.readXMLFile(selectedFile, this.jTextArea1, this);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer el archivo");
             }

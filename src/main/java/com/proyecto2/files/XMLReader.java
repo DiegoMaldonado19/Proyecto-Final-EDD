@@ -27,9 +27,10 @@ public class XMLReader {
     private TableCreator tableCreator;
     private TableLinkedList tableList;
 
-    public void readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+    public TableLinkedList readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
         int amountOfElements = 0;
         tableCreator = new TableCreator();
+        TableLinkedList list = new TableLinkedList();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -38,7 +39,7 @@ public class XMLReader {
             doc.getDocumentElement().normalize();
 
             if (archive.getName().equals("Estructura.xml")) {
-                traverseStructureList(doc, text, amountOfElements, tableCreator);
+                list = traverseStructureList(doc, text, amountOfElements, tableCreator);
             } else if (archive.getName().equals("reportes.rpt")) {
                 traverseReportList(doc, text);
             } else {
@@ -48,9 +49,11 @@ public class XMLReader {
         } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
             JOptionPane.showMessageDialog(mainFrame, e.getMessage());
         }
+
+        return list;
     }
 
-    private void traverseStructureList(Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator) {
+    private TableLinkedList traverseStructureList(Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator) {
         ParamLinkedList paramList = new ParamLinkedList();
         NodeList structures = doc.getElementsByTagName("estructura");
 
@@ -80,11 +83,11 @@ public class XMLReader {
                         }
                     }
                 }
-                
-                tableList =  tableCreator.create(paramList, amountOfElements, table, structures.getLength());
-                
+
+                tableList = tableCreator.create(paramList, amountOfElements, table, structures.getLength());
+
                 tableList.printlistInTextArea(text);
-                
+
                 NodeList relations = structureElement.getElementsByTagName("relacion");
                 for (int k = 0; k < relations.getLength(); k++) {
                     Node relationNode = relations.item(k);
@@ -106,6 +109,8 @@ public class XMLReader {
                 }
             }
         }
+
+        return tableList;
     }
 
     private void traverseAnyList(Document doc, JTextArea text) {
