@@ -1,0 +1,15 @@
+graph ER {
+fontname="Helvetica,Arial,sans-serif"node [fontname="Helvetica,Arial,sans-serif"]edge [fontname="Helvetica,Arial,sans-serif"]layout=neato
+node [shape=box]; cliente; factura ;
+node[shape=ellipse]; Nit;Nombre;Apellido;NoFactura;NitF;Fecha;Lugar;Valor;cliente -- Nit [color=forestgreen];
+cliente -- Nombre;
+cliente -- Apellido;
+ factura  -- NoFactura [color=forestgreen];
+ factura  -- NitF;
+ factura  -- Fecha;
+ factura  -- Lugar;
+ factura  -- Valor;
+ factura  -- cliente;
+label = "\n\nDiagrama Entidad Relación\ndibujado por Diego Maldonado";
+fontsize=20;
+}

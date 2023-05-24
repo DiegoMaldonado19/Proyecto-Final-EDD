@@ -93,8 +93,10 @@ public class XMLReader {
 
                 NodeList relations = structureElement.getElementsByTagName("relacion");
 
-                Param paramPair = new Param("TableParent", table);
-                this.relationList.insert(paramPair);
+                if (relations.getLength() != 0) {
+                    Param paramPair = new Param("TableParent", table);
+                    this.relationList.insert(paramPair);
+                }
 
                 for (int k = 0; k < relations.getLength(); k++) {
                     Node relationNode = relations.item(k);
@@ -112,7 +114,9 @@ public class XMLReader {
                                 amountOfElements++;
                                 Param parameterPair = new Param(relationTag, relationTagContent);
                                 this.relationList.insert(parameterPair);
+                                /*
                                 paramList.insert(parameterPair);
+                                 */
                             }
                         }
                     }
@@ -186,5 +190,5 @@ public class XMLReader {
     public ParamLinkedList getRelationList() {
         return this.relationList;
     }
-    
+
 }

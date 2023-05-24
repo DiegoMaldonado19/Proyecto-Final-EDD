@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class DiagramController {
 
-    public void createGraph(String path, Graph graph, TableLinkedList tableList) {
+    public void createGraph(Graph graph, TableLinkedList tableList) {
         FileWriter fichero = null;
         PrintWriter escritor;
         try {
@@ -35,7 +35,7 @@ public class DiagramController {
         }
         try {
             Runtime rt = Runtime.getRuntime();
-            rt.exec("dot -Tjpg -O " + path + " graph.dot");
+            rt.exec("dot -Tpng -O graph.dot");
             Thread.sleep(500);
         } catch (Exception ex) {
             System.err.println("Error al generar la imagen para el archivo aux_grafico.dot");
@@ -60,30 +60,35 @@ public class DiagramController {
         etiquette = "node [shape=box]; ";
         TableLinkedNode node = tableList.getHead();
 
+        /*
+        String primaryKey = String.valueOf(node.getData().getPrimaryKey());
+         */
         while (node != null) {
             if (node.getNext() == null) {
-                etiquette.concat(node.getData().getName() + ";\n");
+                etiquette = etiquette.concat(node.getData().getName() + ";\n");
             } else {
-                etiquette.concat(node.getData().getName() + ";");
+                etiquette = etiquette.concat(node.getData().getName() + ";");
             }
             node = node.getNext();
         }
 
-        etiquette.concat("node[shape = ellipse];");
+        node = tableList.getHead();
+
+        etiquette = etiquette.concat("node[shape=ellipse]; ");
         while (node != null) {
             ParamLinkedNode paramNode = node.getData().getParams().getHead();
             while (paramNode != null) {
                 if (paramNode.getNext() == null) {
                     if (paramNode.getData().getTag().equals("clave")) {
-                        etiquette.concat(paramNode.getData().getType() + ";\n");
+
                     } else {
-                        etiquette.concat(paramNode.getData().getTag() + ";\n");
+                        etiquette = etiquette.concat(paramNode.getData().getTag() + ";\n");
                     }
                 } else {
                     if (paramNode.getData().getTag().equals("clave")) {
-                        etiquette.concat(paramNode.getData().getType() + ";");
+
                     } else {
-                        etiquette.concat(paramNode.getData().getTag() + ";");
+                        etiquette = etiquette.concat(paramNode.getData().getTag() + ";");
                     }
                 }
                 paramNode = paramNode.getNext();
@@ -92,19 +97,35 @@ public class DiagramController {
             node = node.getNext();
         }
 
+        node = tableList.getHead();
+
         while (node != null) {
             ParamLinkedNode paramNode = node.getData().getParams().getHead();
+            etiquette = etiquette.concat(node.getData().getName() + " -- " + paramNode.getData().getTag()+" [color=forestgreen];\n");
             while (paramNode != null) {
                 if (paramNode.getData().getTag().equals("clave")) {
-                    etiquette.concat(node.getData().getName()+" -- "+paramNode.getData().getType() + ";\n");
+
                 } else {
-                    etiquette.concat(node.getData().getName()+" -- "+paramNode.getData().getTag() + ";\n");
+                    if (paramNode.equals(node.getData().getParams().getHead())) {
+
+                    } else {
+                        etiquette = etiquette.concat(node.getData().getName() + " -- " + paramNode.getData().getTag() + ";\n");
+                    }
+
                 }
                 paramNode = paramNode.getNext();
             }
 
             node = node.getNext();
         }
+
+        for (int i = 0; i < graph.getEdge().length; i++) {
+            if (graph.getEdge()[i] != null) {
+                etiquette = etiquette.concat(graph.getEdge()[i].getSrc() + " -- " + graph.getEdge()[i].getDest() + ";\n");
+            }
+        }
+
+        System.out.println(etiquette);
 
         return etiquette;
     }

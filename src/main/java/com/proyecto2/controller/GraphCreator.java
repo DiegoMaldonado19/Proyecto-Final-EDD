@@ -26,8 +26,6 @@ public class GraphCreator {
         
         ParamLinkedNode paramNode = relationList.getHead();
         
-        relationList.printlist();
-        
         Edge[] edges = new Edge[tableList.countElements()];
         
         while(paramNode!=null){
@@ -36,12 +34,17 @@ public class GraphCreator {
                 String parentTable = paramNode.getData().getType();
                 String childTable = paramNode.getNext().getNext().getData().getTag();
                 edges[cont] = new Edge(parentTable, childTable);
-                System.out.println("Edge number: "+cont+ " "+ edges[cont].toString());
+                break;
             }
             paramNode = paramNode.getNext();
             cont++;
         }
         
+        for(int i=0; i<edges.length; i++){
+            if(edges[i]!=null){
+                System.out.println("Edge number: "+i+ " "+ edges[i].toString());
+            }
+        }
         newGraph.setEdge(edges);
         
         return newGraph;

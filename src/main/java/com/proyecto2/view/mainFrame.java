@@ -13,6 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import com.proyecto2.files.*;
 import com.proyecto2.structures.*;
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -147,6 +148,7 @@ public class MainFrame extends javax.swing.JFrame {
                 this.tableList = this.xmlReader.readXMLFile(selectedFile, this.jTextArea1, this);
                 this.jTreeController.refreshJTree(this, jTree2, tableList);
                 this.graph = this.graphCreator.createGraph(tableList, this.xmlReader.getRelationList());
+
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer el archivo");
             }
@@ -154,7 +156,14 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_archiveChargeButtonMouseClicked
 
     private void DiagramMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DiagramMenuMouseClicked
-       this.diagramController.createGraph("graph.jpg", this.graph, this.tableList);
+        if (this.tableList == null || this.graph == null) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar datos a la Base de Datos para generar un diagrama.");
+        } else {
+            this.diagramController.createGraph(this.graph, this.tableList);
+            ImageIcon image = new ImageIcon("graph.dot.png");
+            
+            JOptionPane.showMessageDialog(this, "Diagrama Entidad Relacion", "Visualizar Imagen", JOptionPane.INFORMATION_MESSAGE, image);
+        }
     }//GEN-LAST:event_DiagramMenuMouseClicked
 
 
