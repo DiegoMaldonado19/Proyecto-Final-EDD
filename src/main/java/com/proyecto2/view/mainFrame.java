@@ -4,6 +4,8 @@
  */
 package com.proyecto2.view;
 
+import com.proyecto2.controller.DiagramController;
+import com.proyecto2.controller.GraphCreator;
 import com.proyecto2.controller.JTreeController;
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +23,11 @@ import javax.swing.tree.DefaultTreeModel;
 public class MainFrame extends javax.swing.JFrame {
 
     private XMLReader xmlReader;
-    private DataFrame dataFrame;
     private TableLinkedList tableList;
     private JTreeController jTreeController;
+    private DiagramController diagramController;
+    private Graph graph;
+    private GraphCreator graphCreator;
 
     /**
      * Creates new form MainFrame
@@ -32,6 +36,9 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         this.xmlReader = new XMLReader();
         this.jTreeController = new JTreeController();
+        this.diagramController = new DiagramController();
+        this.graph = new Graph();
+        this.graphCreator = new GraphCreator();
         this.jTextArea1.setEditable(false);
         this.jTextArea1.setText("En esta area de texto verá el contenido del archivo subido al sistema...");
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tablas");
@@ -60,8 +67,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         archiveChargeButton = new javax.swing.JMenu();
-        editingTablesButton = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        DiagramMenu = new javax.swing.JMenu();
 
         jMenu1.setText("File");
         jMenuBar2.add(jMenu1);
@@ -89,21 +95,13 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenuBar1.add(archiveChargeButton);
 
-        editingTablesButton.setText("Editar Tablas");
-        editingTablesButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        DiagramMenu.setText("Visualizar Diagrama de ER");
+        DiagramMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                editingTablesButtonMouseClicked(evt);
+                DiagramMenuMouseClicked(evt);
             }
         });
-        jMenuBar1.add(editingTablesButton);
-
-        jMenu3.setText("jMenu3");
-        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu3MouseClicked(evt);
-            }
-        });
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(DiagramMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -148,45 +146,25 @@ public class MainFrame extends javax.swing.JFrame {
             try {
                 this.tableList = this.xmlReader.readXMLFile(selectedFile, this.jTextArea1, this);
                 this.jTreeController.refreshJTree(this, jTree2, tableList);
+                this.graph = this.graphCreator.createGraph(tableList, this.xmlReader.getRelationList());
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer el archivo");
             }
         }
     }//GEN-LAST:event_archiveChargeButtonMouseClicked
 
-    private void editingTablesButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editingTablesButtonMouseClicked
-        JOptionPane.showMessageDialog(this, "Evento para enviar a Frame de edicion de tablas");
-        this.dataFrame = new DataFrame();
-
-        this.dataFrame.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_editingTablesButtonMouseClicked
-
-    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
-        BPlusTree bpt = null;
-        bpt = new BPlusTree(3);
-        bpt.insert(5, 33);
-        bpt.insert(15, "veintiuno");
-        bpt.insert(25, 31);
-        bpt.insert(35, "hola mundo");
-        bpt.insert(45, 10);
-
-        if (bpt.search(15) != null) {
-            JOptionPane.showMessageDialog(this, bpt.search(15).toString());
-        } else {
-            JOptionPane.showMessageDialog(this, "Valor no encontrado");
-        }
-    }//GEN-LAST:event_jMenu3MouseClicked
+    private void DiagramMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DiagramMenuMouseClicked
+       this.diagramController.createGraph("graph.jpg", this.graph, this.tableList);
+    }//GEN-LAST:event_DiagramMenuMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu DiagramMenu;
     private javax.swing.JMenu archiveChargeButton;
-    private javax.swing.JMenu editingTablesButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JScrollPane jScrollPane1;

@@ -11,7 +11,6 @@ import com.proyecto2.structures.*;
  */
 public class TableCreator {
     public Table createTable(ParamLinkedList params, String primaryKey, String name, int amountOfElements){
-        System.out.println("Llegue");
         Table newTable = new Table(params, primaryKey, name, amountOfElements);
         return newTable;
     }

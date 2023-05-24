@@ -10,11 +10,11 @@ package com.proyecto2.structures;
  */
 public class Graph {
 
-    int vertices, edges;
+    private int vertices, edges;
 
-    Edge[] edge;
+    private Edge[] edge;
 
-    Graph(int vertices, int edges) {
+    public Graph(int vertices, int edges) {
         this.vertices = vertices;
         this.edges = edges;
 
@@ -23,5 +23,33 @@ public class Graph {
 
             edge[i] = new Edge();
         }
+    }
+
+    public Graph() {
+    }
+    
+
+    public int getVertices() {
+        return vertices;
+    }
+
+    public void setVertices(int vertices) {
+        this.vertices = vertices;
+    }
+
+    public int getEdges() {
+        return edges;
+    }
+
+    public void setEdges(int edges) {
+        this.edges = edges;
+    }
+
+    public Edge[] getEdge() {
+        return edge;
+    }
+
+    public void setEdge(Edge[] edge) {
+        this.edge = edge;
     }
 }

@@ -9,5 +9,34 @@ package com.proyecto2.structures;
  * @author CARIadmin
  */
 public class Edge {
-    int src, dest;
+    String src, dest;
+
+    public Edge(String src, String dest) {
+        this.src = src;
+        this.dest = dest;
+    }
+
+    public Edge() {
+    }
+
+    public String getSrc() {
+        return src;
+    }
+
+    public void setSrc(String src) {
+        this.src = src;
+    }
+
+    public String getDest() {
+        return dest;
+    }
+
+    public void setDest(String dest) {
+        this.dest = dest;
+    }
+    
+     @Override
+    public String toString() {
+        return "Edge{" + "src=" + src + ", dest=" + dest + '}';
+    }
 }

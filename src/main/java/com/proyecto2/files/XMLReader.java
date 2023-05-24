@@ -26,6 +26,9 @@ public class XMLReader {
 
     private TableCreator tableCreator;
     private TableLinkedList tableList;
+    private Graph graph;
+    private GraphCreator graphCreator;
+    private ParamLinkedList relationList;
 
     public TableLinkedList readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
         int amountOfElements = 0;
@@ -55,6 +58,10 @@ public class XMLReader {
 
     private TableLinkedList traverseStructureList(TableLinkedList tableList, Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator, MainFrame mainFrame) {
         ParamLinkedList paramList;
+        this.relationList = new ParamLinkedList();
+        this.graph = new Graph();
+        this.graphCreator = new GraphCreator();
+
         NodeList structures = doc.getElementsByTagName("estructura");
 
         for (int i = 0; i < structures.getLength(); i++) {
@@ -62,7 +69,7 @@ public class XMLReader {
             Node structureNode = structures.item(i);
             if (structureNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element structureElement = (Element) structureNode;
-                
+
                 String table = getTextValue(structureElement, "tabla");
 
                 NodeList fields = structureElement.getChildNodes();
@@ -83,30 +90,39 @@ public class XMLReader {
                         }
                     }
                 }
-  
-                tableList.insert(tableCreator.createTable(paramList,paramList.getPrimaryKey(), table, amountOfElements));
-                
+
                 NodeList relations = structureElement.getElementsByTagName("relacion");
+
+                Param paramPair = new Param("TableParent", table);
+                this.relationList.insert(paramPair);
+
                 for (int k = 0; k < relations.getLength(); k++) {
                     Node relationNode = relations.item(k);
                     if (relationNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element relationElement = (Element) relationNode;
 
                         NodeList relationFields = relationElement.getElementsByTagName("*");
-                        text.append("Relacion: \n");
+
                         for (int l = 0; l < relationFields.getLength(); l++) {
                             Node relationFieldNode = relationFields.item(l);
                             if (relationFieldNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element relationFieldElement = (Element) relationFieldNode;
                                 String relationTag = relationFieldElement.getTagName();
                                 String relationTagContent = relationFieldElement.getTextContent().trim();
-                                text.append("Nombre Campo: " + relationTag + ", Tipo: " + relationTagContent + "\n");
+                                amountOfElements++;
+                                Param parameterPair = new Param(relationTag, relationTagContent);
+                                this.relationList.insert(parameterPair);
+                                paramList.insert(parameterPair);
                             }
                         }
                     }
                 }
+
+                tableList.insert(tableCreator.createTable(paramList, paramList.getPrimaryKey(), table, amountOfElements));
+
             }
         }
+        this.graph = this.graphCreator.createGraph(tableList, this.relationList);
         tableList.printlistInTextArea(text, mainFrame);
         return tableList;
     }
@@ -166,4 +182,9 @@ public class XMLReader {
         }
         return "";
     }
+
+    public ParamLinkedList getRelationList() {
+        return this.relationList;
+    }
+    
 }
