@@ -4,12 +4,15 @@
  */
 package com.proyecto2.view;
 
+import com.proyecto2.controller.JTreeController;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import com.proyecto2.files.*;
 import com.proyecto2.structures.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -20,15 +23,20 @@ public class MainFrame extends javax.swing.JFrame {
     private XMLReader xmlReader;
     private DataFrame dataFrame;
     private TableLinkedList tableList;
+    private JTreeController jTreeController;
 
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
-        xmlReader = new XMLReader();
+        this.xmlReader = new XMLReader();
+        this.jTreeController = new JTreeController();
         this.jTextArea1.setEditable(false);
         this.jTextArea1.setText("En esta area de texto verá el contenido del archivo subido al sistema...");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tablas");
+        DefaultTreeModel treeModel = new DefaultTreeModel(root);
+        this.jTree2.setModel(treeModel);
     }
 
     /**
@@ -139,6 +147,7 @@ public class MainFrame extends javax.swing.JFrame {
             File selectedFile = fileChosser.getSelectedFile();
             try {
                 this.tableList = this.xmlReader.readXMLFile(selectedFile, this.jTextArea1, this);
+                this.jTreeController.refreshJTree(this, jTree2, tableList);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer el archivo");
             }

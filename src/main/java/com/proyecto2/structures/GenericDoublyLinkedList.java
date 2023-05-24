@@ -97,4 +97,9 @@ public class GenericDoublyLinkedList<T> {
             temp = null;
         }
     }
+
+    public GenericDoublyLinkedNode getHead() {
+        return this.head;
+    }
+    
 }

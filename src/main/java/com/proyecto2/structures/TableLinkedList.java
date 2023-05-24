@@ -5,6 +5,8 @@
 package com.proyecto2.structures;
 
 import com.proyecto2.models.*;
+import com.proyecto2.view.MainFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 /**
@@ -75,13 +77,14 @@ public class TableLinkedList {
         System.out.println();
     }
 
-    public void printlistInTextArea(JTextArea text) {
+    public void printlistInTextArea(JTextArea text, MainFrame mainFrame) {
         TableLinkedNode node = this.head;
-        ParamLinkedNode paramNode = node.getData().getParams().getHead();
+
         if (node != null) {
-            text.append("Tabla: " + node.getData().getName() + "\n");
-            text.append("Llave Primaria: " + node.getData().getPrimaryKey() + "\n");
             while (node != null) {
+                ParamLinkedNode paramNode = node.getData().getParams().getHead();
+                text.append("Tabla: " + node.getData().getName() + "\n");
+                text.append("Llave Primaria: " + node.getData().getPrimaryKey() + "\n");
                 if (paramNode != null) {
                     text.append("Parametros de Tabla: " + node.getData().getName() + "\n");
                     while (paramNode != null) {
@@ -92,9 +95,8 @@ public class TableLinkedList {
                 node = node.getNext();
             }
         } else {
-            System.out.println("Lista vacia");
+            JOptionPane.showMessageDialog(mainFrame, "Aun no se han ingresado Tablas");
         }
-        System.out.println();
     }
 
     public void deleteAllNodes() {
@@ -106,4 +108,23 @@ public class TableLinkedList {
             temp = null;
         }
     }
+
+    public TableLinkedNode getHead() {
+        return this.head;
+    }
+
+    public int countElements() {
+        int elements = 0;
+        TableLinkedNode node = this.head;
+        if (node != null) {
+            while (node != null) {
+                elements++;
+                node = node.getNext();
+            }
+        } else {
+            return elements;
+        }
+        return elements;
+    }
+
 }

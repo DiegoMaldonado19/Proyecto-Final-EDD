@@ -118,4 +118,18 @@ public class ParamLinkedList {
         return head;
     }
 
+    public int countElements() {
+        int elements = 0;
+        ParamLinkedNode node = this.head;
+        if (node != null) {
+            while (node != null) {
+                elements++;
+                node = node.getNext();
+            }
+        } else {
+            return elements;
+        }
+        return elements;
+    }
+
 }

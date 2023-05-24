@@ -30,7 +30,7 @@ public class XMLReader {
     public TableLinkedList readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
         int amountOfElements = 0;
         tableCreator = new TableCreator();
-        TableLinkedList list = new TableLinkedList();
+        tableList = new TableLinkedList();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -39,7 +39,7 @@ public class XMLReader {
             doc.getDocumentElement().normalize();
 
             if (archive.getName().equals("Estructura.xml")) {
-                list = traverseStructureList(doc, text, amountOfElements, tableCreator);
+                tableList = traverseStructureList(tableList, doc, text, amountOfElements, tableCreator, mainFrame);
             } else if (archive.getName().equals("reportes.rpt")) {
                 traverseReportList(doc, text);
             } else {
@@ -50,18 +50,19 @@ public class XMLReader {
             JOptionPane.showMessageDialog(mainFrame, e.getMessage());
         }
 
-        return list;
+        return tableList;
     }
 
-    private TableLinkedList traverseStructureList(Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator) {
-        ParamLinkedList paramList = new ParamLinkedList();
+    private TableLinkedList traverseStructureList(TableLinkedList tableList, Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator, MainFrame mainFrame) {
+        ParamLinkedList paramList;
         NodeList structures = doc.getElementsByTagName("estructura");
 
         for (int i = 0; i < structures.getLength(); i++) {
+            paramList = new ParamLinkedList();
             Node structureNode = structures.item(i);
             if (structureNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element structureElement = (Element) structureNode;
-
+                
                 String table = getTextValue(structureElement, "tabla");
 
                 NodeList fields = structureElement.getChildNodes();
@@ -74,7 +75,6 @@ public class XMLReader {
                         if (!structureTag.equals("relacion")) {
                             if (structureTag.equals("tabla")) {
                                 amountOfElements = 0;
-                                paramList.deleteAllNodes();
                             } else {
                                 amountOfElements++;
                                 Param parameterPair = new Param(structureTag, structureTagContent);
@@ -83,11 +83,9 @@ public class XMLReader {
                         }
                     }
                 }
-
-                tableList = tableCreator.create(paramList, amountOfElements, table, structures.getLength());
-
-                tableList.printlistInTextArea(text);
-
+  
+                tableList.insert(tableCreator.createTable(paramList,paramList.getPrimaryKey(), table, amountOfElements));
+                
                 NodeList relations = structureElement.getElementsByTagName("relacion");
                 for (int k = 0; k < relations.getLength(); k++) {
                     Node relationNode = relations.item(k);
@@ -109,11 +107,12 @@ public class XMLReader {
                 }
             }
         }
-
+        tableList.printlistInTextArea(text, mainFrame);
         return tableList;
     }
 
     private void traverseAnyList(Document doc, JTextArea text) {
+
         NodeList tags = doc.getElementsByTagName("*");
         text.append("Tabla: " + tags.item(0).getNodeName() + "\n");
         for (int i = 0; i < tags.getLength(); i++) {
