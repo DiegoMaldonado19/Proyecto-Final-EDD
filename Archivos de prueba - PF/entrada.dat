@@ -1,5 +1,11 @@
-<producto>
-	<Descripción>Boligrafo color negro</Descripción>
-	<CodProducto>BL0001</CodProducto>
-	<Valor>1.25</Valor>
-</producto>
+<cliente>
+	<Nit>103107169</Nit>
+	<Nombre>Diego</Nombre>
+        <Apellido>Maldonado</Apellido>
+	<Nit>103169</Nit>
+	<Nombre>Jose</Nombre>
+        <Apellido>Monterroso</Apellido>
+	<Nit>1039</Nit>
+	<Nombre>Pablo</Nombre>
+        <Apellido>Sanchez</Apellido>
+</cliente>

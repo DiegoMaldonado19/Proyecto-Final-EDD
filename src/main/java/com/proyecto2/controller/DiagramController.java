@@ -49,7 +49,7 @@ public class DiagramController {
                 + "edge [fontname=\"Helvetica,Arial,sans-serif\"]"
                 + "layout=neato\n"
                 + getCodigoInterno(graph, tableList)
-                + "label = \"\\n\\nDiagrama Entidad Relación\\ndibujado por Diego Maldonado\";\n"
+                + "label = \"\\n\\nDiagrama Entidad Relación\\nDibujado por Diego Maldonado\";\n"
                 + "fontsize=20;\n"
                 + "}\n";
     }
@@ -119,9 +119,9 @@ public class DiagramController {
             node = node.getNext();
         }
 
-        for (int i = 0; i < graph.getEdge().length; i++) {
-            if (graph.getEdge()[i] != null) {
-                etiquette = etiquette.concat(graph.getEdge()[i].getSrc() + " -- " + graph.getEdge()[i].getDest() + ";\n");
+        for (Edge edge : graph.getEdge()) {
+            if (edge != null) {
+                etiquette = etiquette.concat(edge.getSrc() + " -- " + edge.getDest() + ";\n");
             }
         }
 

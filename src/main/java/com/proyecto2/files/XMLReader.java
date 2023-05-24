@@ -30,7 +30,7 @@ public class XMLReader {
     private GraphCreator graphCreator;
     private ParamLinkedList relationList;
 
-    public TableLinkedList readXMLFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+    public TableLinkedList readStructureFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
         int amountOfElements = 0;
         tableCreator = new TableCreator();
         tableList = new TableLinkedList();
@@ -41,19 +41,68 @@ public class XMLReader {
 
             doc.getDocumentElement().normalize();
 
-            if (archive.getName().equals("Estructura.xml")) {
-                tableList = traverseStructureList(tableList, doc, text, amountOfElements, tableCreator, mainFrame);
-            } else if (archive.getName().equals("reportes.rpt")) {
-                traverseReportList(doc, text);
-            } else {
-                traverseAnyList(doc, text);
-            }
+            tableList = traverseStructureList(tableList, doc, text, amountOfElements, tableCreator, mainFrame);
 
         } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
             JOptionPane.showMessageDialog(mainFrame, e.getMessage());
         }
 
         return tableList;
+    }
+
+    public ParamLinkedList readInsertionFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+        ParamLinkedList paramLinkedList = new ParamLinkedList();
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(archive);
+
+            doc.getDocumentElement().normalize();
+
+            paramLinkedList = traverseAnyList(doc, text);
+
+        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
+            JOptionPane.showMessageDialog(mainFrame, e.getMessage());
+        }
+
+        return paramLinkedList;
+    }
+
+    public ParamLinkedList readEliminationFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+        ParamLinkedList paramLinkedList = new ParamLinkedList();
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(archive);
+
+            doc.getDocumentElement().normalize();
+
+            paramLinkedList = traverseAnyList(doc, text);
+
+        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
+            JOptionPane.showMessageDialog(mainFrame, e.getMessage());
+        }
+
+        return paramLinkedList;
+    }
+
+    public ParamLinkedList readReportFile(File archive, JTextArea text, MainFrame mainFrame) throws FileNotFoundException, IOException {
+        int amountOfElements = 0;
+        ParamLinkedList paramLinkedList = new ParamLinkedList();
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(archive);
+
+            doc.getDocumentElement().normalize();
+
+            paramLinkedList = traverseReportList(doc, text);
+
+        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
+            JOptionPane.showMessageDialog(mainFrame, e.getMessage());
+        }
+
+        return paramLinkedList;
     }
 
     private TableLinkedList traverseStructureList(TableLinkedList tableList, Document doc, JTextArea text, int amountOfElements, TableCreator tableCreator, MainFrame mainFrame) {
@@ -114,27 +163,29 @@ public class XMLReader {
                                 amountOfElements++;
                                 Param parameterPair = new Param(relationTag, relationTagContent);
                                 this.relationList.insert(parameterPair);
-                                /*
-                                paramList.insert(parameterPair);
-                                 */
                             }
                         }
                     }
                 }
 
-                tableList.insert(tableCreator.createTable(paramList, paramList.getPrimaryKey(), table, amountOfElements));
+                this.tableList.insert(tableCreator.createTable(paramList, paramList.getPrimaryKey(), table, amountOfElements));
 
             }
         }
         this.graph = this.graphCreator.createGraph(tableList, this.relationList);
-        tableList.printlistInTextArea(text, mainFrame);
-        return tableList;
+        this.tableList.printlistInTextArea(text, mainFrame);
+        return this.tableList;
     }
 
-    private void traverseAnyList(Document doc, JTextArea text) {
-
+    private ParamLinkedList traverseAnyList(Document doc, JTextArea text) {
+        ParamLinkedList paramList = new ParamLinkedList();
         NodeList tags = doc.getElementsByTagName("*");
         text.append("Tabla: " + tags.item(0).getNodeName() + "\n");
+        String tableName = tags.item(0).getNodeName();
+
+        Param param = new Param(tableName, "Table");
+        paramList.insert(param);
+
         for (int i = 0; i < tags.getLength(); i++) {
             Node tagNode = tags.item(i);
             if (tagNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -147,16 +198,30 @@ public class XMLReader {
                         String anyTag = fieldElement.getNodeName();
                         String anyTagContent = fieldElement.getTextContent().trim();
                         text.append("Nombre Campo: " + anyTag + " , Tipo: " + anyTagContent + "\n");
+                        Param newParam = new Param(anyTag, anyTagContent);
+                        paramList.insert(newParam);
                     }
                 }
             }
         }
+
+        return paramList;
     }
 
-    private void traverseReportList(Document doc, JTextArea text) {
+    private ParamLinkedList traverseReportList(Document doc, JTextArea text) {
+        ParamLinkedList paramList = new ParamLinkedList();
+        
         NodeList tags = doc.getElementsByTagName("reporte");
+        text.append("Tabla: " + tags.item(0).getNodeName() + "\n");
+        String tableName = tags.item(0).getNodeName();
+        
+        Param param = new Param(tableName, "Table");
+        paramList.insert(param);
+        
+        
         for (int i = 0; i < tags.getLength(); i++) {
             Node tagNode = tags.item(i);
+            
             if (tagNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element tagElement = (Element) tagNode;
                 NodeList fields = tagElement.getChildNodes();
@@ -167,10 +232,14 @@ public class XMLReader {
                         String anyTag = fieldElement.getNodeName();
                         String anyTagContent = fieldElement.getTextContent().trim();
                         text.append("Nombre Campo: " + anyTag + " , Tipo: " + anyTagContent + "\n");
+                        Param newParam = new Param(anyTag, anyTagContent);
+                        paramList.insert(newParam);
                     }
                 }
             }
         }
+        
+        return paramList;
     }
 
     private static String getTextValue(Element element, String tagName) {

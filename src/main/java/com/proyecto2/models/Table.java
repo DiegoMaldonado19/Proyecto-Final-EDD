@@ -25,6 +25,9 @@ public class Table<T> {
         this.tree = new BPlusTree(order);
     }
 
+    public Table() {
+    }
+
     public ParamLinkedList getParams() {
         return this.params;
     }

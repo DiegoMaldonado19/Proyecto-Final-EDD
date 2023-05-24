@@ -693,7 +693,7 @@ public class BPlusTree<T> {
      *
      * @param lowerBound: (int) the lower bound of the range
      * @param upperBound: (int) the upper bound of the range
-     * @return an ArrayList<Double> that holds all values of dictionary pairs
+     * @return an ArrayList<T> that holds all values of dictionary pairs
      * whose keys are within the specified range
      */
     public ArrayList<T> search(int lowerBound, int upperBound) {

@@ -6,6 +6,7 @@ package com.proyecto2.view;
 
 import com.proyecto2.controller.DiagramController;
 import com.proyecto2.controller.GraphCreator;
+import com.proyecto2.controller.InsertionController;
 import com.proyecto2.controller.JTreeController;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,10 @@ public class MainFrame extends javax.swing.JFrame {
     private DiagramController diagramController;
     private Graph graph;
     private GraphCreator graphCreator;
+    private ParamLinkedList insertionParams;
+    private ParamLinkedList deletionParams;
+    private ParamLinkedList reportTables;
+    private InsertionController insertionController;
 
     /**
      * Creates new form MainFrame
@@ -40,6 +45,10 @@ public class MainFrame extends javax.swing.JFrame {
         this.diagramController = new DiagramController();
         this.graph = new Graph();
         this.graphCreator = new GraphCreator();
+        this.insertionParams = new ParamLinkedList();
+        this.deletionParams = new ParamLinkedList();
+        this.reportTables = new ParamLinkedList();
+        this.insertionController = new InsertionController();
         this.jTextArea1.setEditable(false);
         this.jTextArea1.setText("En esta area de texto verá el contenido del archivo subido al sistema...");
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tablas");
@@ -145,9 +154,20 @@ public class MainFrame extends javax.swing.JFrame {
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChosser.getSelectedFile();
             try {
-                this.tableList = this.xmlReader.readXMLFile(selectedFile, this.jTextArea1, this);
-                this.jTreeController.refreshJTree(this, jTree2, tableList);
-                this.graph = this.graphCreator.createGraph(tableList, this.xmlReader.getRelationList());
+
+                if (selectedFile.getName().equals("Estructura.xml")) {
+                    this.tableList = this.xmlReader.readStructureFile(selectedFile, this.jTextArea1, this);
+                    this.jTreeController.refreshJTree(this, jTree2, tableList);
+                    this.graph = this.graphCreator.createGraph(tableList, this.xmlReader.getRelationList());
+                } else if (selectedFile.getName().equals("entrada.dat")) {
+                    this.insertionParams = this.xmlReader.readInsertionFile(selectedFile, jTextArea1, this);
+                    this.tableList = this.insertionController.insertData(this.tableList, this.insertionParams);
+                    System.out.println(this.tableList.getHead().getData().getTree().search(1));
+                } else if (selectedFile.getName().equals("elimina.dat")) {
+                    this.deletionParams = this.xmlReader.readEliminationFile(selectedFile, jTextArea1, this);
+                } else if (selectedFile.getName().equals("reportes.rpt")) {
+                    this.reportTables = this.xmlReader.readReportFile(selectedFile, jTextArea1, this);
+                }
 
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer el archivo");
@@ -161,7 +181,7 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             this.diagramController.createGraph(this.graph, this.tableList);
             ImageIcon image = new ImageIcon("graph.dot.png");
-            
+
             JOptionPane.showMessageDialog(this, "Diagrama Entidad Relacion", "Visualizar Imagen", JOptionPane.INFORMATION_MESSAGE, image);
         }
     }//GEN-LAST:event_DiagramMenuMouseClicked

@@ -10,6 +10,6 @@ cliente -- Apellido;
  factura  -- Lugar;
  factura  -- Valor;
  factura  -- cliente;
-label = "\n\nDiagrama Entidad Relación\ndibujado por Diego Maldonado";
+label = "\n\nDiagrama Entidad Relación\nDibujado por Diego Maldonado";
 fontsize=20;
 }
